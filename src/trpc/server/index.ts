@@ -1,8 +1,10 @@
 import { TRPCError, initTRPC } from '@trpc/server'
 
+import { Role } from '@/utils/types'
 // import { AIService } from '@/ai/ai.service'
 // import { Role } from '@/util/types'
 import { auth } from '@clerk/nextjs/server'
+import { authorizeUser } from './util'
 // import { authorizeUser } from './util'
 import db from '@/lib/db'
 
@@ -23,10 +25,20 @@ export const createTRPCContext = async (opts: { headers: Headers }) => {
   }
 }
 
-// create a TRPC router with the context you created above
 const t = initTRPC.context<typeof createTRPCContext>().create()
 
 export const createTRPCRouter = t.router
 export const publicProcedure = t.procedure
 
 // Todo: Create a protected procedure that requires a user to be signed in and have a specific role to access it (e.g. 'admin')
+export const protectedProcedure = (...roles: Role[]) =>
+  t.procedure.use(async ({ ctx, next }) => {
+    if (!ctx.session || !ctx.session.userId) {
+      throw new TRPCError({
+        code: 'UNAUTHORIZED',
+        message: 'Sign in to access this data.',
+      })
+    }
+
+    return next({ ctx: { ...ctx, userId: ctx.session.userId } })
+  })
