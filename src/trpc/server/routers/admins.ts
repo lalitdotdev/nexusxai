@@ -18,4 +18,18 @@ export const adminRoutes = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.admin.delete({ where: { id: input.id } })
     }),
+
+  create: protectedProcedure('admin')
+    .input(schemaCreateUser)
+    .mutation(async ({ ctx, input }) => {
+      const admin = await ctx.db.admin.findUnique({ where: input })
+      console.log('admin', admin)
+      if (admin) {
+        return new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'The user is already an admin.',
+        })
+      }
+      return ctx.db.admin.create({ data: input })
+    }),
 })
