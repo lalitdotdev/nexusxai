@@ -10,4 +10,7 @@ export const adminRoutes = createTRPCRouter({
       include: { User: true },
     })
   }),
+  findAll: protectedProcedure('admin').query(({ ctx }) => {
+    return ctx.db.admin.findMany({ include: { User: true } })
+  }),
 })
