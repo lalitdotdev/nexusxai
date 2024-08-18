@@ -25,5 +25,21 @@ export default async function Layout({
         )
     }
 
-
+    return (
+        <div className="flex space-x-4">
+            <div className="hidden w-full max-w-xs sm:block">
+                <AdminMenu />
+            </div>
+            <div className="flex-grow">
+                <div className="sm:hidden">
+                    <SimpleSidebar>
+                        <AdminMenu />
+                    </SimpleSidebar>
+                </div>
+                <div className="bg-white min-h-[calc(100vh-8rem)] py-2 md:px-4 pt-4 mt-6 rounded-md">
+                    {children}
+                </div>
+            </div>
+        </div>
+    )
 }
