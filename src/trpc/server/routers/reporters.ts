@@ -10,4 +10,7 @@ export const reporterRoutes = createTRPCRouter({
       include: { User: true },
     })
   }),
+  findAll: protectedProcedure('admin').query(({ ctx }) => {
+    return ctx.db.reporter.findMany({ include: { User: true } })
+  }),
 })
