@@ -15,9 +15,12 @@ export const DeleteAdminButton = ({ id }: CreateUserInput) => {
         onSuccess() {
             toast.success(`Admin deleted successfully.`, {
                 description: 'Request assistance from our admins and provide your ID.',
-
+                // action: {
+                //     label: "Undo",
+                //     onClick: () => console.log("Undo"),
+                // },
             })
-
+            revalidatePath('/admin/manageAdmins')
         },
     })
 
