@@ -13,4 +13,9 @@ export const reporterRoutes = createTRPCRouter({
   findAll: protectedProcedure('admin').query(({ ctx }) => {
     return ctx.db.reporter.findMany({ include: { User: true } })
   }),
+  delete: protectedProcedure('admin')
+    .input(schemaCreateUser)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.reporter.delete({ where: { id: input.id } })
+    }),
 })
