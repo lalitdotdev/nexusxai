@@ -1,5 +1,6 @@
 import { TRPCError, initTRPC } from '@trpc/server'
 
+import { AIService } from '@/ai/ai.service'
 import { Role } from '@/utils/types'
 // import { AIService } from '@/ai/ai.service'
 // import { Role } from '@/util/types'
@@ -11,16 +12,18 @@ import db from '@/lib/db'
 // Todo:  create a TRPC context that includes the database connection, session, and any other services you want to use in your procedures
 
 export const createTRPCContext = async (opts: { headers: Headers }) => {
-  const session = auth()
+  const session = await auth()
 
   /**
    * TODO: Add  other services you want to use in your procedures here (add ai service)
    */
 
+  const ai = new AIService()
+
   return {
     db: db,
     session,
-
+    ai, // add ai service to context
     ...opts,
   }
 }

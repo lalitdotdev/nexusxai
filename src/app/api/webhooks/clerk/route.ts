@@ -19,11 +19,7 @@ export async function POST(request: Request) {
         },
       })
 
-      /**
-       * TODO: Add user to (pinecone) vector database
-
-       * await ai.addUser({ uid: id })
-       */
+      await ai.addUser({ uid: id })
 
       return NextResponse.json({ status: 'success' })
     } catch (error) {
