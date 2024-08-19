@@ -18,4 +18,17 @@ export const reporterRoutes = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.reporter.delete({ where: { id: input.id } })
     }),
+  create: protectedProcedure('admin')
+    .input(schemaCreateUser)
+    .mutation(async ({ ctx, input }) => {
+      const reporter = await ctx.db.reporter.findUnique({ where: input })
+      console.log('reporter', reporter)
+      if (reporter) {
+        return new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'The user is already a reporter.',
+        })
+      }
+      return ctx.db.reporter.create({ data: input })
+    }),
 })
