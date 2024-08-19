@@ -22,7 +22,13 @@ export const CreateReporter = () => {
         mutateAsync: createReporter,
     } = trpcClient.reporters.create.useMutation()
 
-
+    useEffect(() => {
+        if (data) {
+            reset()
+            toast({ title: 'Reporter created.' })
+            revalidatePath('/admin/manageReporters')
+        }
+    }, [data, reset, toast])
 
     useEffect(() => {
         if (error) {
