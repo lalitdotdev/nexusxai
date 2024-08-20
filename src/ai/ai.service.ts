@@ -32,6 +32,26 @@ export class AIService {
     ])
   }
 
+  //   upsert article in the db
+  async upsertArticle(article: RouterOutputs['articles']['create']) {
+    // article should be an object that matches the shape of the output from a specific operation within a type called RouterOutputs, specifically the create operation under the articles namespace.
+    const combinedText = `${article.title} ${article.body} ${article.tags.join(' ')}`
+
+    const values = await this.createEmbedding(combinedText) // create embedding for the article text
+    // upsert article in the pinecone vector database
+    await this.pineconeIndex.upsert([
+      {
+        id: article.id.toString(), // article.id is a number, so we need to convert it to a string
+        values: values.data[0].embedding,
+        metadata: {
+          ...article,
+          summary: article.summary || '',
+          type: 'article',
+        },
+      },
+    ])
+  }
+
   //   adding another user recommendations to the article object -----> protected Routes
 
   async userRecommendations({
@@ -69,9 +89,6 @@ export class AIService {
       score: score || 0,
     }))
   }
-
-  //   Give feedback
-
 
   // createEmbedding creates an embedding for a given content string using the Voyage AI API and returns the embedding values
   private createEmbedding(content: string) {
