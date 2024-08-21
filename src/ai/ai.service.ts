@@ -52,6 +52,14 @@ export class AIService {
     ])
   }
 
+  //   update article in the db -----> protected Routes (update) in pinecone vector database
+  async updateArticle(articleId: number, published: boolean) {
+    await this.pineconeIndex.update({
+      id: articleId.toString(),
+      metadata: { published },
+    })
+  }
+
   //   adding another user recommendations to the article object -----> protected Routes
 
   async userRecommendations({
