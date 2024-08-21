@@ -20,6 +20,13 @@ export const articlesRoutes = createTRPCRouter({
       })
       return article
     }),
+
+    //   fetching all articles from the database -----> public Routes
+    findAll: protectedProcedure('admin').query(({ ctx }) => {
+        return ctx.db.article.findMany()
+      }),
+
+
   //   adding another user recommendations to the article object -----> protected Routes
 
   userRecommendations: protectedProcedure().query(async ({ ctx }) => {
