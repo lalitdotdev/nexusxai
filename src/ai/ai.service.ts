@@ -98,6 +98,52 @@ export class AIService {
     }))
   }
 
+  async giveFeedback({
+    uid,
+    articleId,
+    type,
+  }: {
+    uid: string
+    articleId: number
+    type: FeedbackType
+  }) {
+    // Get records from the Pinecone vector database ----> this is the query that returns the user and article records based on the user's id and article's id ----> the user and article records are returned as an object with the id and values of each record
+    const { records } = await this.pineconeIndex.fetch([
+      uid,
+      articleId.toString(),
+    ])
+    const userRecord = records[uid] // userRecord is an object with the user's vector and metadata
+    const articleRecord = records[articleId.toString()] // articleRecord is an object with the article's vector and metadata
+
+    if (!userRecord || !articleRecord) {
+      throw new TRPCError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'User or article vector not found',
+      })
+    }
+
+    const userVector = userRecord.values // get the user's vector
+    const articleVector = articleRecord.values // get the article's vector
+
+    const adjustmentScale = this.adjustmentScales[type] // get the adjustment scale for the feedback type
+
+    // calculate the new user vector by adding the adjustment scale to the article vector and subtracting the user vector ----> this is the new user vector that will be updated in the Pinecone vector database ----> the new user vector is an array of numbers representing the updated vector
+    const newUserVector = userVector.map(
+      (value, index) =>
+        value + adjustmentScale * (articleVector[index] - value),
+    )
+
+    await this.pineconeIndex.upsert([{ id: uid, values: newUserVector }])
+  }
+
+  // adjustmentScales is an object that maps feedback types to adjustment scales
+  private adjustmentScales: { [key: string]: number } = {
+    [FeedbackType.LOVE]: 0.3,
+    [FeedbackType.LIKE]: 0.15,
+    [FeedbackType.DISLIKE]: -0.15,
+    [FeedbackType.HATE]: -0.3,
+  }
+
   // createEmbedding creates an embedding for a given content string using the Voyage AI API and returns the embedding values
   private createEmbedding(content: string) {
     const apiUrl = `https://api.voyageai.com/v1/embeddings`

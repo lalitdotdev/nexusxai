@@ -1,5 +1,9 @@
 import { createTRPCRouter, protectedProcedure } from '..'
-import { schemaCreateArticle, schemaUpdateArticle } from '@/forms/schemas'
+import {
+  schemaCreateArticle,
+  schemaNumberID,
+  schemaUpdateArticle,
+} from '@/forms/schemas'
 
 import { fetchAndScoreRelatedArticles } from './shared/articles'
 
@@ -25,6 +29,16 @@ export const articlesRoutes = createTRPCRouter({
   findAll: protectedProcedure('admin').query(({ ctx }) => {
     return ctx.db.article.findMany()
   }),
+
+  //   fetching one article from the database -----> public Routes
+  findOne: protectedProcedure()
+    .input(schemaNumberID)
+    .query(async ({ ctx, input }) => {
+      return ctx.db.article.findUnique({
+        where: { id: input.id },
+        include: { Reporter: { include: { User: true } } },
+      })
+    }),
 
   update: protectedProcedure('admin', 'reporter')
     .input(schemaUpdateArticle)
