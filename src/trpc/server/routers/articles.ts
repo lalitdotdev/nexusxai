@@ -1,7 +1,7 @@
 import { createTRPCRouter, protectedProcedure } from '..'
+import { schemaCreateArticle, schemaUpdateArticle } from '@/forms/schemas'
 
 import { fetchAndScoreRelatedArticles } from './shared/articles'
-import { schemaCreateArticle } from '@/forms/schemas'
 
 export const articlesRoutes = createTRPCRouter({
   create: protectedProcedure('admin', 'reporter')
@@ -21,11 +21,21 @@ export const articlesRoutes = createTRPCRouter({
       return article
     }),
 
-    //   fetching all articles from the database -----> public Routes
-    findAll: protectedProcedure('admin').query(({ ctx }) => {
-        return ctx.db.article.findMany()
-      }),
+  //   fetching all articles from the database -----> public Routes
+  findAll: protectedProcedure('admin').query(({ ctx }) => {
+    return ctx.db.article.findMany()
+  }),
 
+  update: protectedProcedure('admin', 'reporter')
+    .input(schemaUpdateArticle)
+    .mutation(async ({ input: { articleId, published }, ctx }) => {
+      const article = await ctx.db.article.update({
+        data: { published },
+        where: { id: articleId },
+      })
+      await ctx.ai.updateArticle(articleId, published)
+      return article
+    }),
 
   //   adding another user recommendations to the article object -----> protected Routes
 
