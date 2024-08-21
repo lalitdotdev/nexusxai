@@ -49,16 +49,6 @@ export const NewArticle = () => {
                 <Controller control={control} name="published" render={({ field }) => <Switch onCheckedChange={field.onChange} checked={field.value} />} />
             </Label>
 
-            <SelectTags
-                onChange={(tags) => {
-                    console.log('tags', tags)
-                    setValue('tags', tags)
-                }}
-
-                className="m-4"
-
-
-            />
 
             <Button type="submit" disabled={isLoading} loading={isLoading}>
                 {isLoading ? 'Creating...' : 'Create Article'}
