@@ -57,4 +57,12 @@ export const articlesRoutes = createTRPCRouter({
     const { ai, db, userId } = ctx
     return fetchAndScoreRelatedArticles({ ai, db, id: userId })
   }),
+
+  //   more like this --> article recommendations
+  moreLikeThisArticleRecommendations: protectedProcedure()
+    .input(schemaNumberID)
+    .query(async ({ ctx, input: { id } }) => {
+      const { ai, db } = ctx
+      return fetchAndScoreRelatedArticles({ ai, db, id: id.toString() })
+    }),
 })
