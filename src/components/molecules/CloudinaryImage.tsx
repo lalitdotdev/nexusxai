@@ -13,7 +13,7 @@ export const CloundinaryImage = ({
     if (!publicId) {
         return (
             <Image
-                src="/user.jpg"
+                src="/images/user.jpg"
                 className={className}
                 width={500}
                 height={500}
