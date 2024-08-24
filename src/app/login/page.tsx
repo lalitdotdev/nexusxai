@@ -12,9 +12,7 @@ function LoginPage() {
           </div>
           <div className="text-center">
             <h1 className="text-4xl font-bold">NexusXAi</h1>
-            <h2 className=" font-light text-base">
-             Ai writer and reporters
-            </h2>
+            <h2 className=" font-light text-base">Ai writer and reporters</h2>
             <h3 className="my-5 font-bold">
               <SignInButton />
             </h3>

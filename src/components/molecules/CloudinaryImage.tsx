@@ -5,29 +5,29 @@ import { CldImage } from 'next-cloudinary'
 import Image from 'next/image'
 
 export const CloundinaryImage = ({
-    publicId,
-    className,
+  publicId,
+  className,
 }: {
-    publicId?: string | null
+  publicId?: string | null
 } & BaseComponent) => {
-    if (!publicId) {
-        return (
-            <Image
-                src="/images/user.jpg"
-                className={className}
-                width={500}
-                height={500}
-                alt=""
-            />
-        )
-    }
+  if (!publicId) {
     return (
-        <CldImage
-            width={500}
-            height={500}
-            className={className}
-            src={publicId}
-            alt=""
-        />
+      <Image
+        src="/images/user.jpg"
+        className={className}
+        width={500}
+        height={500}
+        alt=""
+      />
     )
+  }
+  return (
+    <CldImage
+      width={500}
+      height={500}
+      className={className}
+      src={publicId}
+      alt=""
+    />
+  )
 }

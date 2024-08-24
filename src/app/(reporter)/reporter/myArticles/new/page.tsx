@@ -5,14 +5,10 @@ import { UpdateArticleStateButton } from '@/components/organisms/UpdateArticleSt
 import { trpcServer } from '@/trpc/clients/server'
 
 export default async function MyArticlesPage() {
-
-
-    return (
-        <div className="flex flex-col gap-4">
-            <h1>My Articles</h1>
-            <NewArticle />
-
-
-        </div>
-    )
+  return (
+    <div className="flex flex-col gap-4">
+      <h1>My Articles</h1>
+      <NewArticle />
+    </div>
+  )
 }

@@ -6,40 +6,40 @@ import { auth } from '@clerk/nextjs/server'
 import { trpcServer } from '@/trpc/clients/server'
 
 export default async function Layout({
-    children,
+  children,
 }: {
-    children: React.ReactNode
+  children: React.ReactNode
 }) {
-    const { userId } = await auth()
+  const { userId } = await auth()
 
-    if (!userId) {
-        return <Link href="/sign-in">Sign In</Link>
-    }
+  if (!userId) {
+    return <Link href="/sign-in">Sign In</Link>
+  }
 
-    const reporterMe = await trpcServer.reporters.reporterMe.query()
-    if (!reporterMe) {
-        return (
-            <div className="">
-                <TellThem uid={userId} role="reporter" />
-            </div>
-        )
-    }
-
+  const reporterMe = await trpcServer.reporters.reporterMe.query()
+  if (!reporterMe) {
     return (
-        <div className="flex space-x-4">
-            <div className="hidden w-full max-w-xs sm:block">
-                <ReporterMenu />
-            </div>
-            <div className="flex-grow">
-                <div className="sm:hidden">
-                    <SimpleSidebar>
-                        <ReporterMenu />
-                    </SimpleSidebar>
-                </div>
-                <div className="bg-white min-h-[calc(100vh-8rem)] py-2 md:px-4 pt-4 mt-6 rounded-md">
-                    {children}
-                </div>
-            </div>
-        </div>
+      <div className="">
+        <TellThem uid={userId} role="reporter" />
+      </div>
     )
+  }
+
+  return (
+    <div className="flex space-x-4">
+      <div className="hidden w-full max-w-xs sm:block">
+        <ReporterMenu />
+      </div>
+      <div className="flex-grow">
+        <div className="sm:hidden">
+          <SimpleSidebar>
+            <ReporterMenu />
+          </SimpleSidebar>
+        </div>
+        <div className="bg-white min-h-[calc(100vh-8rem)] py-2 md:px-4 pt-4 mt-6 rounded-md">
+          {children}
+        </div>
+      </div>
+    </div>
+  )
 }

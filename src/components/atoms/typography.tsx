@@ -1,6 +1,6 @@
-import { cn } from '@/utils/styles'
-import { BaseComponent } from '@/util/types'
+import { BaseComponent } from '@/utils/types'
 import { ReactNode } from 'react'
+import { cn } from '@/utils/styles'
 
 export const Title = ({ children, className }: BaseComponent) => {
   return (

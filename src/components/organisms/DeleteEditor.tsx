@@ -10,53 +10,53 @@ import { trpcClient } from '@/trpc/clients/client'
 import { useToast } from '../molecules/Toaster/use-toast'
 
 export const DeleteEditor = ({
-    editor,
+  editor,
 }: {
-    editor: NonNullable<RouterOutputs['editors']['myEditors'][0]>
+  editor: NonNullable<RouterOutputs['editors']['myEditors'][0]>
 }) => {
-    const utils = trpcClient.useUtils()
-    const { error, mutateAsync: deleteEditor } =
-        trpcClient.editors.delete.useMutation({
-            onSuccess: (data) => {
-                utils.editors.myEditors.invalidate()
-                toast({ title: `Editor ${data.name} updated.` })
-                setOpenDialog(false)
-            },
-        })
-    const [openDialog, setOpenDialog] = useState(false)
-    const { toast } = useToast()
+  const utils = trpcClient.useUtils()
+  const { error, mutateAsync: deleteEditor } =
+    trpcClient.editors.delete.useMutation({
+      onSuccess: (data) => {
+        utils.editors.myEditors.invalidate()
+        toast({ title: `Editor ${data.name} updated.` })
+        setOpenDialog(false)
+      },
+    })
+  const [openDialog, setOpenDialog] = useState(false)
+  const { toast } = useToast()
 
-    useEffect(() => {
-        if (error) {
-            toast({ title: 'Action failed.' })
-        }
-    }, [error, toast])
+  useEffect(() => {
+    if (error) {
+      toast({ title: 'Action failed.' })
+    }
+  }, [error, toast])
 
-    return (
-        <div className="font-sans">
-            <Button
-                size="none"
-                variant={'ghost'}
-                onClick={() => {
-                    setOpenDialog(true)
-                }}
-            >
-                <Trash />
-            </Button>
-            <SimpleDialog
-                open={openDialog}
-                setOpen={setOpenDialog}
-                title="Delete Editor"
-            >
-                <Button
-                    onClick={async () => {
-                        await deleteEditor({ id: editor.id })
-                    }}
-                    variant={'destructive'}
-                >
-                    Delete Editor {editor.name}?
-                </Button>
-            </SimpleDialog>
-        </div>
-    )
+  return (
+    <div className="font-sans">
+      <Button
+        size="none"
+        variant={'ghost'}
+        onClick={() => {
+          setOpenDialog(true)
+        }}
+      >
+        <Trash />
+      </Button>
+      <SimpleDialog
+        open={openDialog}
+        setOpen={setOpenDialog}
+        title="Delete Editor"
+      >
+        <Button
+          onClick={async () => {
+            await deleteEditor({ id: editor.id })
+          }}
+          variant={'destructive'}
+        >
+          Delete Editor {editor.name}?
+        </Button>
+      </SimpleDialog>
+    </div>
+  )
 }
