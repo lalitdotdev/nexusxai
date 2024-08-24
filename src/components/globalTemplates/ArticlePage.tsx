@@ -46,7 +46,7 @@ export const ArticlePage = ({ articleId }: IArticlePageProps) => {
             </div>
             <ReactionPanel articleId={article.id} />
             <Separator className="" />
-            <Slider defaultValue={[33]} max={100} step={1} />
+            {/* <Slider defaultValue={[33]} max={100} step={1} /> */}
 
             <MoreLikeThis className="mt-8" id={article.id} />
         </div>
