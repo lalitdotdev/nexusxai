@@ -26,13 +26,12 @@ export const editorRoutes = createTRPCRouter({
   }),
 
   getFavorite: protectedProcedure()
-  .input(schemaNumberID)
-  .query(({ ctx, input }) => {
-    return ctx.db.editor.findFirst({
-      where: { id: input.id, FavoritedBy: { some: { id: ctx.userId } } },
-    })
-  }),
-
+    .input(schemaNumberID)
+    .query(({ ctx, input }) => {
+      return ctx.db.editor.findFirst({
+        where: { id: input.id, FavoritedBy: { some: { id: ctx.userId } } },
+      })
+    }),
 
   favorite: protectedProcedure()
     .input(schemaNumberID)
@@ -93,4 +92,11 @@ export const editorRoutes = createTRPCRouter({
         where: { id },
       })
     }),
+
+  favoriteEditors: protectedProcedure().query(({ ctx }) => {
+    return ctx.db.editor.findMany({
+      where: { FavoritedBy: { some: { id: ctx.userId } } },
+      include: { User: true },
+    })
+  }),
 })
