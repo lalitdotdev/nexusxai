@@ -1,19 +1,29 @@
+import { Article, Editor, FeedbackType } from '@prisma/client'
 import { Index, Pinecone, RecordMetadata } from '@pinecone-database/pinecone'
+import {
+  stylePrompts,
+  verbosityPrompts,
+  wordComplexityPrompts,
+} from './prompts'
 
-import { FeedbackType } from '@prisma/client'
+import Anthropic from '@anthropic-ai/sdk'
 import { INDEX_NAME } from './constants'
+import { MessageParam } from '@anthropic-ai/sdk/resources/messages.mjs'
 import { RouterOutputs } from '@/trpc/clients/types'
 import { TRPCError } from '@trpc/server'
+import db from '@/lib/db'
 
 export class AIService {
   private readonly pineconeIndex: Index<RecordMetadata>
-
+  private readonly anthropic: Anthropic
   constructor() {
     // Create a Pinecone index if it doesn't exist
     const pinecone = new Pinecone({
       apiKey: process.env.PINECONE_API_KEY || '',
     })
 
+    this.anthropic = new Anthropic()
+    // defaults to process.env["ANTHROPIC_API_KEY"]
     this.pineconeIndex = pinecone.Index(INDEX_NAME)
   }
 
@@ -58,6 +68,107 @@ export class AIService {
       id: articleId.toString(),
       metadata: { published },
     })
+  }
+
+  //   writing an editor article using claude sonnet
+
+  async writeEditorArticle(article: Article, editor: Editor, userId: string) {
+    const messages: MessageParam[] = []
+
+    messages.push({
+      role: 'user',
+      content: `
+      Article title: ${article.title}
+      Article body: ${article.body},
+
+      style: ${editor.style}
+      styleDescription: ${stylePrompts[editor.style]}
+
+      verbosity: ${editor.verbosity}
+      verbosityDescription: ${verbosityPrompts[editor.verbosity]}
+
+      wordComplexity: ${editor.wordComplexity}
+      wordComplexityDescription: ${wordComplexityPrompts[editor.wordComplexity]}
+
+      language: Please use the language ${editor.language}
+
+      ${editor.additionalNotes ? 'Additional notes: ' + editor.additionalNotes : null}
+
+      `,
+    })
+    try {
+      const response = await this.anthropic.messages.create({
+        // create a claude sonnet response using the anthropic api
+        model: 'claude-3-sonnet-20240229',
+        messages,
+        max_tokens: 1000,
+        system:
+          'You are a news editor. Without any preamble or introduction, Rewrite the given article to suit the users requirements.',
+      })
+
+      // Todo: Update credit balance
+
+      const { input_tokens: inputTokens, output_tokens: outputTokens } =
+        response.usage
+
+      // calculate the usage of the response based on the input and output tokens ----> the usage is calculated as the sum of the input and output tokens divided by 1_000_000 and multiplied by 15 to account for the cost of the model ----> the usage is then subtracted from the credit balance of the user ----> the credit balance is updated in the database with the new balance and the transaction is created in the database with the amount, input tokens, output tokens, and notes
+      const usage =
+        (inputTokens * 3) / 1_000_000 + (outputTokens * 15) / 1_000_000
+      // update the credit balance of the user ----> the credit balance is updated in the database with the new balance and the transaction is created in the database with the amount, input tokens, output tokens, and notes
+      await db.creditBalance.upsert({
+        where: { userId },
+        create: {
+          balance: -usage,
+          userId,
+          Transactions: {
+            create: {
+              amount: -usage,
+              inputTokens,
+              outputTokens,
+              userId,
+              notes: `Rewrite article "${article.title}" with "${editor.name}".`,
+            },
+          },
+        },
+        update: {
+          balance: { decrement: usage },
+          Transactions: {
+            create: {
+              amount: -usage,
+              inputTokens,
+              outputTokens,
+              userId,
+              notes: `Rewrite article "${article.title}" with "${editor.name}".`,
+            },
+          },
+        },
+      })
+
+      const rewrittenArticle =
+        response.content.find((item) => item.type === 'text')?.text || ''
+      console.log('anthropic claude sonnet response', response)
+      console.log(response)
+
+      const editorArticle = await db.editorArticle.create({
+        data: {
+          body: rewrittenArticle,
+          title: article.title,
+          editorId: editor.id,
+          originalArticleId: article.id,
+        },
+        include: {
+          Editor: true,
+          OriginalArticle: true,
+        },
+      })
+      return editorArticle
+    } catch (error) {
+      console.log('Error', error)
+      throw new TRPCError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'Something went wrong.',
+      })
+    }
   }
 
   //   adding another user recommendations to the article object -----> protected Routes
