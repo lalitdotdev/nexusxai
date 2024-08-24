@@ -25,6 +25,15 @@ export const editorRoutes = createTRPCRouter({
     })
   }),
 
+  getFavorite: protectedProcedure()
+  .input(schemaNumberID)
+  .query(({ ctx, input }) => {
+    return ctx.db.editor.findFirst({
+      where: { id: input.id, FavoritedBy: { some: { id: ctx.userId } } },
+    })
+  }),
+
+
   favorite: protectedProcedure()
     .input(schemaNumberID)
     .mutation(async ({ ctx, input }) => {
