@@ -18,4 +18,10 @@ export const editorRoutes = createTRPCRouter({
       include: { User: true },
     })
   }),
+  myEditors: protectedProcedure().query(({ ctx }) => {
+    return ctx.db.editor.findMany({
+      where: { userId: ctx.userId },
+      include: { User: true },
+    })
+  }),
 })
