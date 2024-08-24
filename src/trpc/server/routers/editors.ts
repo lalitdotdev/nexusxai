@@ -24,6 +24,23 @@ export const editorRoutes = createTRPCRouter({
       include: { User: true },
     })
   }),
+
+  delete: protectedProcedure()
+    .input(schemaNumberID)
+    .mutation(async ({ ctx, input }) => {
+      const editor = await ctx.db.editor.findUnique({
+        where: { userId: ctx.userId, id: input.id },
+      })
+      if (!editor) {
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'Editor not found.',
+        })
+      }
+      return ctx.db.editor.delete({
+        where: { id: input.id, userId: ctx.userId },
+      })
+    }),
   update: protectedProcedure()
     .input(schemaCreateEditor)
     .input(schemaNumberID)
