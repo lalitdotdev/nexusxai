@@ -1,23 +1,29 @@
-import { DeveloperInfo } from './DeveloperInfo'
-import { Icons } from '../atoms/Icons'
-import Link from 'next/link'
-import { cn } from '@/utils/styles'
+"use client"
 
-export interface IBrandProps {}
+import { usePathname, useRouter } from 'next/navigation';
 
-export const Brand = () => {
-  return (
-    <div>
-      <Link href="/" className={cn(' text-primary-500 text-2xl')}>
-        <h2 className="order-1 mt-2 tracking-tight text-center text-balance !leading-tight font-semibold text-2xl md:text-3xl text-gray-900">
-          Nexus
-          <span className="relative px-2 text-green-500 font-semibold">
-            xAi
-            <Icons.underline className="hidden sm:block pointer-events-none absolute inset-x-0 -bottom-3 text-green-500" />
-          </span>{' '}
-        </h2>
-      </Link>
-      {/* <DeveloperInfo /> */}
-    </div>
-  )
+import Link from 'next/link';
+import Logo from '../Logo';
+import clsx from 'clsx';
+
+interface NavLogoProps {
+    href: string;
+    title: string;
 }
+
+function NavLogo({ href, title }: NavLogoProps) {
+    const pathname = usePathname()
+    const isActive = pathname === href;
+
+    return (
+        <Link
+            href={href}
+            className={clsx('flex h-9 items-center gap-2 rounded-xl px-2')}
+            aria-label={title}
+        >
+            <Logo active={isActive} />
+        </Link>
+    );
+}
+
+export default NavLogo;

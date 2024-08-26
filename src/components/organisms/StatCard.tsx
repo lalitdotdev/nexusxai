@@ -1,36 +1,36 @@
-import { cn } from '@/utils/styles'
 import { BaseComponent } from '@/utils/types'
-import { LucideIcon } from 'lucide-react'
 import Link from 'next/link'
+import { LucideIcon } from 'lucide-react'
 import React from 'react'
+import { cn } from '@/utils/styles'
 
 export const StatCard = ({
-  label,
-  Icon,
-  href,
-  children,
-  className,
+    label,
+    Icon,
+    href,
+    children,
+    className,
 }: {
-  label: string
-  Icon: LucideIcon
-  href?: string
+    label: string
+    Icon: LucideIcon
+    href?: string
 } & BaseComponent) => {
-  const Comp = href ? Link : 'div'
+    const Comp = href ? Link : 'div'
 
-  return (
-    <Comp
-      href={href || ''}
-      className={cn(
-        'bg-white shadow-lg p-6 flex items-center border rounded-lg',
-        className,
-      )}
-    >
-      <Icon className="mr-4 w-10 h-10 flex-shrink-0" strokeWidth={1} />
+    return (
+        <Comp
+            href={href || ''}
+            className={cn(
+                'shadow-lg p-6 flex items-center border border-gray-700 rounded-lg',
+                className,
+            )}
+        >
+            <Icon className="mr-4 w-10 h-10 flex-shrink-0" strokeWidth={1} />
 
-      <div>
-        <p className="text-gray-500 text-sm">{label}</p>
-        <p className="text-2xl font-bold">{children}</p>
-      </div>
-    </Comp>
-  )
+            <div>
+                <p className="text-gray-500 text-sm">{label}</p>
+                <p className="text-2xl font-bold">{children}</p>
+            </div>
+        </Comp>
+    )
 }

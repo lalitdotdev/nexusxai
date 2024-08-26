@@ -1,48 +1,62 @@
 import { Editor, Verbosity, WordComplexity } from '@prisma/client'
 
-import { LevelIndicator } from '../molecules/LevelIndicator'
-import { TitleValue } from '../molecules/TitleValue'
+import { Badge } from '../atoms/badge'
 
 const wordComplexityIndices = {
-  [WordComplexity.ELEMENTARY]: 0,
-  [WordComplexity.INTERMEDIATE]: 1,
-  [WordComplexity.SOPHISTICATED]: 2,
+    [WordComplexity.ELEMENTARY]: 1,
+    [WordComplexity.INTERMEDIATE]: 2,
+    [WordComplexity.SOPHISTICATED]: 3,
 }
+
 const verbosityIndices = {
-  [Verbosity.SUCCINCT]: 0,
-  [Verbosity.MODERATE]: 1,
-  [Verbosity.ELABORATE]: 2,
+    [Verbosity.SUCCINCT]: 1,
+    [Verbosity.MODERATE]: 2,
+    [Verbosity.ELABORATE]: 3,
 }
 
 export const EditorInfo = ({
-  editor,
+    editor,
 }: {
-  editor: Pick<Editor, 'style' | 'wordComplexity' | 'verbosity' | 'language'>
+    editor: Pick<Editor, 'style' | 'wordComplexity' | 'verbosity' | 'language'>
 }) => {
-  return (
-    <>
-      <TitleValue title="Style">
-        <div className="text-sm capitalize text-black">
-          {editor.style.split('_').join(' ').toLowerCase()}
+    return (
+        <div className="grid grid-cols-2 gap-2 text-sm">
+            <div>
+                <span className="font-semibold text-gray-600 dark:text-gray-300">Style:</span>
+                <Badge variant="secondary" className="ml-2 capitalize">
+                    {editor.style.split('_').join(' ').toLowerCase()}
+                </Badge>
+            </div>
+            <div>
+                <span className="font-semibold text-gray-600 dark:text-gray-300">Language:</span>
+                <Badge variant="secondary" className="ml-2 capitalize">
+                    {editor.language.toLowerCase()}
+                </Badge>
+            </div>
+            <div className="col-span-2">
+                <span className="font-semibold text-gray-600 dark:text-gray-300">Verbosity:</span>
+                <div className="mt-1 flex space-x-1">
+                    {[1, 2, 3].map((level) => (
+                        <div
+                            key={level}
+                            className={`h-2 w-8 rounded ${level <= verbosityIndices[editor.verbosity] ? 'bg-blue-500' : 'bg-gray-300 dark:bg-gray-600'
+                                }`}
+                        />
+                    ))}
+                </div>
+            </div>
+            <div className="col-span-2">
+                <span className="font-semibold text-gray-600 dark:text-gray-300">Word Complexity:</span>
+                <div className="mt-1 flex space-x-1">
+                    {[1, 2, 3].map((level) => (
+                        <div
+                            key={level}
+                            className={`h-2 w-8 rounded ${level <= wordComplexityIndices[editor.wordComplexity] ? 'bg-blue-500' : 'bg-gray-300 dark:bg-gray-600'
+                                }`}
+                        />
+                    ))}
+                </div>
+            </div>
         </div>
-      </TitleValue>
-      <TitleValue title="Language">
-        <div className="text-sm capitalize text-gray-800">
-          {editor.language.toLowerCase()}
-        </div>
-      </TitleValue>{' '}
-      <TitleValue title="Verbosity">
-        <LevelIndicator
-          level={verbosityIndices[editor.verbosity]}
-          total={Object.keys(Verbosity).length}
-        />
-      </TitleValue>
-      <TitleValue title="WordComplexity">
-        <LevelIndicator
-          level={wordComplexityIndices[editor.wordComplexity]}
-          total={Object.keys(WordComplexity).length}
-        />
-      </TitleValue>
-    </>
-  )
+    )
 }
