@@ -144,6 +144,9 @@ importers:
         specifier: ^3.23.8
         version: 3.23.8
     devDependencies:
+      '@next/eslint-plugin-next':
+        specifier: ^14.2.7
+        version: 14.2.7
       '@types/node':
         specifier: ^20.16.3
         version: 20.16.3
@@ -154,11 +157,14 @@ importers:
         specifier: ^18.3.0
         version: 18.3.0
       eslint:
-        specifier: ^8.57.0
+        specifier: ^8
         version: 8.57.0
       eslint-config-next:
         specifier: 14.2.5
         version: 14.2.5(eslint@8.57.0)(typescript@5.5.4)
+      eslint-plugin-react:
+        specifier: ^7.35.0
+        version: 7.35.0(eslint@8.57.0)
       husky:
         specifier: ^8.0.3
         version: 8.0.3
@@ -169,13 +175,13 @@ importers:
         specifier: ^3.3.3
         version: 3.3.3
       prisma:
-        specifier: ^5.19.0
+        specifier: ^5.18.0
         version: 5.19.0
       tailwindcss:
         specifier: ^3.4.10
         version: 3.4.10
       typescript:
-        specifier: ^5.5.4
+        specifier: ^5
         version: 5.5.4
 
 packages:
@@ -328,6 +334,9 @@ packages:
 
   '@next/eslint-plugin-next@14.2.5':
     resolution: {integrity: sha512-LY3btOpPh+OTIpviNojDpUdIbHW9j0JBYBjsIp8IxtDFfYFyORvw3yNq6N231FVqQA7n7lwaf7xHbVJlA1ED7g==}
+
+  '@next/eslint-plugin-next@14.2.7':
+    resolution: {integrity: sha512-+7xh142AdhZGjY9/L0iFo7mqRBMJHe+q+uOL+hto1Lfo9DeWCGcR6no4StlFbVSVcA6fQLKEX6y6qhMsSKbgNQ==}
 
   '@next/swc-darwin-arm64@14.2.5':
     resolution: {integrity: sha512-/9zVxJ+K9lrzSGli1///ujyRfon/ZneeZ+v4ptpiPoOU+GKZnm8Wj8ELWU1Pm7GHltYRBklmXMTUqM/DqQ99FQ==}
@@ -3115,6 +3124,10 @@ snapshots:
   '@next/env@14.2.5': {}
 
   '@next/eslint-plugin-next@14.2.5':
+    dependencies:
+      glob: 10.3.10
+
+  '@next/eslint-plugin-next@14.2.7':
     dependencies:
       glob: 10.3.10
 
