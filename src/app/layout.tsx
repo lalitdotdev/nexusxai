@@ -17,6 +17,7 @@ import React from 'react'
 import { SonnerToaster } from '@/components/molecules/Toaster/SonnerToaster'
 import { TRPCReactProvider } from '@/trpc/clients/client'
 import { Toaster } from '@/components/molecules/Toaster/Toaster'
+import { cn } from '@/utils/styles'
 import { dark } from '@clerk/themes'
 
 const inter = Outfit({ subsets: ['latin'] })
@@ -39,7 +40,7 @@ export default function RootLayout({
     >
       <TRPCReactProvider>
         <html lang="en">
-          <body className={inter.className}>
+          <body className={cn(inter.className, 'bg-white')}>
             <Navbar />
             <Container>{children}</Container>
             <Toaster />

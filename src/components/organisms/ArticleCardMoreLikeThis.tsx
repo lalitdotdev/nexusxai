@@ -13,7 +13,7 @@ export const ArticleCardMoreLikeThis = ({
 }) => {
   const { article, score } = relatedArticle
   return (
-    <div>
+    <div className="text-zinc-600">
       <div className="underline underline-offset-4 mb-2 ">
         {Math.floor(score * 100)}% Match
       </div>
@@ -28,7 +28,7 @@ export const ArticleCardMoreLikeThis = ({
         </div>
       </Link>
 
-      <div className="max-w-md mt-1 text-sm gray-500 line-clamp-2">
+      <div className="max-w-md mt-1 text-sm text-gray-500 line-clamp-2">
         {article.summary}
       </div>
       <DisplayDate dateString={article.createdAt} className="mt-2" />

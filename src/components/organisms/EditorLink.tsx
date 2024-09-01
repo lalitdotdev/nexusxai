@@ -29,7 +29,7 @@ export const EditorLink = ({
 
   return (
     <TooltipProvider>
-      <Tooltip delayDuration={100}>
+      <Tooltip delayDuration={50}>
         <TooltipTrigger>
           <Link
             href={href}
@@ -47,11 +47,11 @@ export const EditorLink = ({
           </Link>
         </TooltipTrigger>
         <TooltipContent
-          side="top"
-          sideOffset={5}
-          className="md:side-left mb-4 md:side-offset-10"
+          side="left"
+          sideOffset={10}
+          className="bg-green-50 border-2 border-white backdrop-blur-3xl  w-1/2 "
         >
-          <div className="mb-2 font-semibold">{editor.name}</div>
+          <div className="mb-2 font-semibold text-zinc-800">{editor.name}</div>
           <div className="grid grid-cols-2 gap-3">
             <EditorInfo editor={editor} />
           </div>

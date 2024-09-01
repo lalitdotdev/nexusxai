@@ -15,38 +15,40 @@ import remarkGfm from 'remark-gfm'
 import { trpcClient } from '@/trpc/clients/client'
 
 export interface IArticlePageProps {
-    articleId: number
+  articleId: number
 }
 
 export const ArticlePage = ({ articleId }: IArticlePageProps) => {
-    const { data: article, isLoading } = trpcClient.articles.findOne.useQuery({
-        id: articleId,
-    })
+  const { data: article, isLoading } = trpcClient.articles.findOne.useQuery({
+    id: articleId,
+  })
 
-    if (isLoading) {
-        return <Loading />
-    }
-    if (!article) {
-        return <AlertBox>Article not found.</AlertBox>
-    }
+  if (isLoading) {
+    return <Loading />
+  }
+  if (!article) {
+    return <AlertBox>Article not found.</AlertBox>
+  }
 
-    return (
-        <div className={cn(' mx-auto mb-24 mt-12 border-none ')}>
-            <h1 className={cn('text-2xl font-semibold mb-2')}>{article.title}</h1>
-            <DisplayDate dateString={article.createdAt} />
-            <ReporterInfo
-                image={article.Reporter.User.image}
-                name={article.Reporter.User.name}
-            />
+  return (
+    <div className={cn(' mx-auto mb-24 mt-12 border-none p-12 ')}>
+      <h1 className={cn('text-2xl font-semibold mb-2 text-zinc-700')}>
+        {article.title}
+      </h1>
+      <DisplayDate dateString={article.createdAt} />
+      <ReporterInfo
+        image={article.Reporter.User.image}
+        name={article.Reporter.User.name}
+      />
 
-            <div className="mt-4 whitespace-pre-wrap text-lg ">
-                <Markdown remarkPlugins={[remarkGfm]}>{article.body}</Markdown>
-            </div>
-            <ReactionPanel articleId={article.id} />
-            <Separator className="" />
-            {/* <Slider defaultValue={[33]} max={100} step={1} /> */}
+      <div className="mt-4 whitespace-pre-wrap text-lg text-zinc-600">
+        <Markdown remarkPlugins={[remarkGfm]}>{article.body}</Markdown>
+      </div>
+      <ReactionPanel articleId={article.id} />
+      <Separator className="my-10 p-1 bg-blue-100" />
+      {/* <Slider defaultValue={[33]} max={100} step={1} /> */}
 
-            <MoreLikeThis className="mt-8" id={article.id} />
-        </div>
-    )
+      <MoreLikeThis className="mt-8" id={article.id} />
+    </div>
+  )
 }

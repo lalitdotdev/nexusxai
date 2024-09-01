@@ -34,8 +34,8 @@ export const EditorArticlePage = ({
   }
 
   return (
-    <div className={cn('max-w-lg mx-auto mb-24 mt-12')}>
-      <Title className={cn('text-xl font-semibold mb-2')}>
+    <div className={cn('max-w-3xl mx-auto mb-24 mt-12 p-4 ')}>
+      <Title className={cn('text-xl font-semibold mb-2 text-zinc-800')}>
         {editorArticle.title}
       </Title>
       <DisplayDate dateString={editorArticle.createdAt} />
@@ -44,10 +44,10 @@ export const EditorArticlePage = ({
         publicId={editorArticle.Editor.imagePublicId}
         name={editorArticle.Editor.name}
       />
-      <div className="grid grid-cols-2 gap-4 mt-4 p-2 border border-gray-300 rounded-lg">
+      <div className="grid grid-cols-2 gap-4 mt-4 p-2 border border-gray-300 rounded-lg text-zinc-700">
         <EditorInfo editor={editorArticle.Editor} />
       </div>
-      <div className="mt-4 whitespace-pre-wrap text-lg ">
+      <div className="mt-4 whitespace-pre-wrap text-lg text-zinc-700">
         <Markdown remarkPlugins={[remarkGfm]}>{editorArticle.body}</Markdown>
       </div>
     </div>

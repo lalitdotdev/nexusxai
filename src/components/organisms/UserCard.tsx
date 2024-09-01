@@ -20,7 +20,7 @@ export const UserCard = ({ user, children }: IUserCardProps) => {
         className="w-16 h-20 object-cover rounded"
       />
       <div>
-        <div className="font-medium ">{user.name || '-'}</div>
+        <div className="font-medium text-zinc-700 ">{user.name || '-'}</div>
         <div className="text-xs text-gray-500 whitespace-pre-wrap">
           {user.id}
         </div>

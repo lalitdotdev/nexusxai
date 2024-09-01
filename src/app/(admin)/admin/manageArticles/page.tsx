@@ -17,7 +17,7 @@ export default async function ManageArticlesAdminPage() {
       {allArticles.map((article) => (
         <div
           key={article.id}
-          className="flex flex-col gap-2 p-1 md:p-2 space-y-2 border-b border-border mb-2"
+          className="flex flex-col gap-2 p-2 md:p-4  space-y-2 border-b border-blue-50 py-4 "
         >
           <ArticleCardSimple article={article} />
           <UpdateArticleStateButton

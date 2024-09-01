@@ -40,8 +40,9 @@ export const DeleteEditor = ({
         onClick={() => {
           setOpenDialog(true)
         }}
+        className="text-gray-400"
       >
-        <Trash />
+        <Trash className="w-4 h-4" />
       </Button>
       <SimpleDialog
         open={openDialog}

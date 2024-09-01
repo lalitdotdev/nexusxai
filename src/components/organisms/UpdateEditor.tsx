@@ -51,8 +51,9 @@ export const UpdateEditor = ({
         onClick={() => {
           setOpenDialog(true)
         }}
+        className="text-gray-400"
       >
-        <PenBox />
+        <PenBox className="w-4 h-4" />
       </Button>
       <SimpleDialog
         open={openDialog}

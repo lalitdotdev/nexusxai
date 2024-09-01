@@ -20,8 +20,8 @@ const CustomLinkComponent: ForwardRefRenderFunction<
       ref={ref}
       href={href}
       className={cn(
-        active ? 'font-semibold text-primary' : '',
-        'flex gap-1 transition-all relative  items-center gap-x-2 py-4  text-sm font-[500] pl-6 cursor-pointer',
+        active ? 'font-semibold text-blue-600 ' : '',
+        'flex gap-1 transition-all relative  items-center gap-x-2 py-4  text-sm font-[500] pl-6 cursor-pointer text-zinc-800',
         className,
       )}
       {...props}

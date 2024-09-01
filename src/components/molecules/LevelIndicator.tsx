@@ -12,7 +12,7 @@ export const LevelIndicator = ({ total, level }: LevelIndicatorProps) => {
         <div
           key={currentLevel}
           className={`w-6 rounded h-1 ${
-            currentLevel <= level ? 'bg-black' : 'bg-gray-300'
+            currentLevel <= level ? 'bg-orange-600' : 'bg-gray-300'
           }`}
         />
       ))}

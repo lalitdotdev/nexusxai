@@ -1,22 +1,22 @@
-"use client"
+'use client'
 
-import { memo, useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react'
 
-import type { PropsWithChildren } from 'react';
-import { createPortal } from 'react-dom';
+import type { PropsWithChildren } from 'react'
+import { createPortal } from 'react-dom'
 
 interface PortalProps {
-    selector: string;
+  selector: string
 }
 
 function Portal({ selector, children = null }: PropsWithChildren<PortalProps>) {
-    const [container, setContainer] = useState<Element | null>(null);
+  const [container, setContainer] = useState<Element | null>(null)
 
-    useEffect(() => {
-        setContainer(document.querySelector(selector));
-    }, [selector]);
+  useEffect(() => {
+    setContainer(document.querySelector(selector))
+  }, [selector])
 
-    return container ? createPortal(children, container) : null;
+  return container ? createPortal(children, container) : null
 }
 
-export default memo(Portal);
+export default memo(Portal)

@@ -26,7 +26,7 @@ export const ReporterInfo = ({
           alt=""
         />
       )}
-      <div>
+      <div className="text-zinc-600">
         <div className="text-xs">Written by,</div>
         <div>{name}</div>
       </div>

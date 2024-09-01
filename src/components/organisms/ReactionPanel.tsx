@@ -15,14 +15,15 @@ export interface IReactionPanelProps {
 type FeedbackOption = {
   type: FeedbackType
   Icon: LucideIcon
+  label: string
 }
 
 //   feedback options array ----> this is the array of feedback options that is used to render the reaction buttons ----> the feedback options are an array of objects with the type and Icon properties ----> the type is the feedback type and the Icon is the LucideIcon component
 const feedbackOptions: FeedbackOption[] = [
-  { type: FeedbackType.LOVE, Icon: SmilePlus },
-  { type: FeedbackType.LIKE, Icon: Smile },
-  { type: FeedbackType.DISLIKE, Icon: Frown },
-  { type: FeedbackType.HATE, Icon: Angry },
+  { type: FeedbackType.LOVE, Icon: SmilePlus, label: 'Love' },
+  { type: FeedbackType.LIKE, Icon: Smile, label: 'Like' },
+  { type: FeedbackType.DISLIKE, Icon: Frown, label: 'Dislike' },
+  { type: FeedbackType.HATE, Icon: Angry, label: 'Hate' },
 ]
 
 export const ReactionPanel = ({
@@ -44,6 +45,7 @@ export const ReactionPanel = ({
           selected={myFeedback?.type === reaction.type}
           type={reaction.type}
           articleId={articleId}
+          label={reaction.label}
         />
       ))}
     </div>

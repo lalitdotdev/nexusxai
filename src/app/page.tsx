@@ -4,10 +4,9 @@ import { Icons } from '@/components/atoms/Icons'
 import Page from '@/contents-layouts/Page'
 
 export default async function Home() {
-    return (
-
-        <main className="mt-10 p-8 ">
-            {/* <h1 className=" font-semibold text-3xl mb-4 ">
+  return (
+    <main className="mt-10 p-8 overflow-x-hidden">
+      {/* <h1 className=" font-semibold text-3xl mb-4 ">
         Your
         <span className="relative px-2">
           Recommended{' '}
@@ -15,14 +14,11 @@ export default async function Home() {
         </span>{' '}
         articles
       </h1> */}
-            {/* <hr className="border-gray-400 my-4" /> */}
+      {/* <hr className="border-gray-400 my-4" /> */}
 
-
-            <div className="p-2 ">
-                <HomePage />
-            </div>
-        </main>
-
-
-    )
+      <div className="p-2 ">
+        <HomePage />
+      </div>
+    </main>
+  )
 }

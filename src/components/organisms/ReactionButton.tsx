@@ -1,14 +1,18 @@
-import { trpcClient } from '@/trpc/clients/client'
-import { FeedbackType } from '@prisma/client'
-import { LucideIcon } from 'lucide-react'
+import { Loader, LucideIcon } from 'lucide-react'
+
 import { Button } from '../atoms/button'
+import { FeedbackType } from '@prisma/client'
+import React from 'react'
 import { cn } from '@/utils/styles'
+import { motion } from 'framer-motion'
+import { trpcClient } from '@/trpc/clients/client'
 
 export interface IReactionButtonProps {
   Icon: LucideIcon
   type: FeedbackType
   articleId: number
   selected?: boolean
+  label: string
 }
 
 export const ReactionButton = ({
@@ -16,6 +20,7 @@ export const ReactionButton = ({
   type,
   articleId,
   selected,
+  label,
 }: IReactionButtonProps) => {
   const utils = trpcClient.useUtils()
 
@@ -26,23 +31,40 @@ export const ReactionButton = ({
         utils.articles.userRecommendations.invalidate()
       },
     })
+
   return (
-    <Button
-      size={'icon'}
-      variant={'ghost'}
-      onClick={async () => {
-        await giveFeedback({
-          articleId,
-          type,
-        })
-      }}
-      loading={isLoading}
-      className={cn(
-        'transition-all',
-        selected ? 'shadow-lg border border-black scale-110' : '',
-      )}
-    >
-      <Icon />
-    </Button>
+    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+      <Button
+        variant={selected ? 'default' : 'outline'}
+        size="sm"
+        onClick={async () => {
+          await giveFeedback({
+            articleId,
+            type,
+          })
+        }}
+        disabled={isLoading}
+        className={cn(
+          'transition-all duration-200 ease-in-out',
+          'flex items-center space-x-2',
+          'rounded-full px-4 py-2',
+          selected
+            ? 'bg-blue-600 text-white hover:bg-blue-700'
+            : 'bg-white text-gray-700 hover:bg-gray-100 hover:text-blue-600',
+          'border border-gray-300',
+          'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50',
+        )}
+      >
+        <Icon
+          className={cn('w-4 h-4', selected ? 'text-white' : 'text-blue-600')}
+        />
+        <span className="text-xs font-medium hidden md:block">{label}</span>
+        {isLoading && (
+          <div className="ml-2 animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600">
+            <Loader className="animate-spin" />
+          </div>
+        )}
+      </Button>
+    </motion.div>
   )
 }

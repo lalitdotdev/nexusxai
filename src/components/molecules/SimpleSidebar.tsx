@@ -13,7 +13,9 @@ export function SimpleSidebar({ children }: BaseComponent) {
             <Menu className="w-5 h-5" />
           </Button>
         </SheetTrigger>
-        <SheetContent side="left">{children}</SheetContent>
+        <SheetContent side="left" className=" text-zinc-700 ">
+          {children}
+        </SheetContent>
       </Sheet>
     </div>
   )
