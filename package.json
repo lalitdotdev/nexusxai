@@ -12,7 +12,8 @@
     "format:check": "pnpm format --check",
     "format:write": "pnpm format --write",
     "validate": "pnpm format:write && pnpm lint && pnpm tsc ",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.27.1",
